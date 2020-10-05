@@ -60,7 +60,6 @@ def mainGame():
     playerMaxVelY = 10
     playerMinVelY = -8
     playerAccY = 1
-
     playerFlapAccv = -8 
     playerFlapped = False 
 
