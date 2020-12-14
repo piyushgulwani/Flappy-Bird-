@@ -1,7 +1,10 @@
-import random 
-import sys 
+
+#! Importing Modules
+import random, sys 
 import pygame
 from pygame.locals import * 
+
+#! In-Game Variables 
 FPS = 32
 SCREENWIDTH = 289
 SCREENHEIGHT = 511
@@ -13,6 +16,7 @@ PLAYER = 'gallery/sprites/bird.png'
 BACKGROUND = 'gallery/sprites/background.png'
 PIPE = 'gallery/sprites/pipe.png'
 
+#! Main Welcome Screen
 def welcomeScreen():
 
     playerx = int(SCREENWIDTH/5)
@@ -20,6 +24,7 @@ def welcomeScreen():
     messagex = int((SCREENWIDTH - GAME_SPRITES['message'].get_width())/2)
     messagey = int(SCREENHEIGHT*0.13)
     basex = 0
+
     while True:
         for event in pygame.event.get():
             if event.type == QUIT or (event.type==KEYDOWN and event.key == K_ESCAPE):
@@ -28,6 +33,7 @@ def welcomeScreen():
 
             elif event.type==KEYDOWN and (event.key==K_SPACE or event.key == K_UP):
                 return
+
             else:
                 SCREEN.blit(GAME_SPRITES['background'], (0, 0))    
                 SCREEN.blit(GAME_SPRITES['player'], (playerx, playery))    
@@ -36,7 +42,9 @@ def welcomeScreen():
                 pygame.display.update()
                 FPSCLOCK.tick(FPS)
 
+#! Main Game Code
 def mainGame():
+#! Main  Game Variables
     score = 0
     playerx = int(SCREENWIDTH/5)
     playery = int(SCREENWIDTH/2)
@@ -69,6 +77,7 @@ def mainGame():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 pygame.quit()
                 sys.exit()
+
             if event.type == KEYDOWN and (event.key == K_SPACE or event.key == K_UP):
                 if playery > 0:
                     playerVelY = playerFlapAccv
@@ -80,15 +89,15 @@ def mainGame():
         if crashTest:
             return     
 
-        #check for score
+#! Updating and Checking the Score 
         playerMidPos = playerx + GAME_SPRITES['player'].get_width()/2
         for pipe in upperPipes:
             pipeMidPos = pipe['x'] + GAME_SPRITES['pipe'][0].get_width()/2
+
             if pipeMidPos<= playerMidPos < pipeMidPos +4:
                 score +=1
                 print(f"Your score is {score}") 
                 GAME_SOUNDS['point'].play()
-
 
         if playerVelY <playerMaxVelY and not playerFlapped:
             playerVelY += playerAccY
@@ -130,6 +139,7 @@ def mainGame():
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
+#! Function for Collision
 def isCollide(playerx, playery, upperPipes, lowerPipes):
     if playery> GROUNDY - 25  or playery<0:
         GAME_SOUNDS['hit'].play()
@@ -148,6 +158,7 @@ def isCollide(playerx, playery, upperPipes, lowerPipes):
 
     return False
 
+#! Func to gen random Pipes
 def getRandomPipe():
     pipeHeight = GAME_SPRITES['pipe'][0].get_height()
     offset = SCREENHEIGHT/3
@@ -159,11 +170,6 @@ def getRandomPipe():
         {'x': pipeX, 'y': y2} 
     ]
     return pipe
-
-
-
-
-
 
 if __name__ == "__main__":
     pygame.init() 
@@ -200,4 +206,3 @@ if __name__ == "__main__":
     while True:
         welcomeScreen()
         mainGame() 
-
